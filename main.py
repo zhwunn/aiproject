@@ -1,2 +1,2 @@
 import streamlit as st
-st.title('welsome to haeun's first webservice!')
+st.title('여누킴잡아먹기')
