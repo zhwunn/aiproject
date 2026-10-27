@@ -1,2 +1,5 @@
 import streamlit as st
 st.title('여누킴잡아먹기')
+st.text_input('이름을 대시오')
+st.selectbox('좋아하는 여누의 상태를 선택하세요',['화난 여누','예민한 여누','착해진 여누','우울한 여누', '행복한 여누'])
+st.button('여누야 인사하자')
