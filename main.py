@@ -6,3 +6,6 @@ c=st.selectbox('여누를 어떻게 잡아먹을지 선택하세요',['정수리
 if st.button('여누야 인사하자'):
   st.write('어 하이?')
   st.info(a+' 문 닫고 들어와')
+  st.warning(b+'인 상태를 좋아한다고? 미쳤구나?')
+  st.error(c+' 이렇게 하고 나를 잡아먹겠다고? 맞을래?')
+  st.bomb()
