@@ -8,4 +8,4 @@ if st.button('여누야 인사하자'):
   st.info(a+' 문 닫고 들어와')
   st.warning(b+'인 상태를 좋아한다고? 미쳤구나?')
   st.error(c+' 이렇게 하고 나를 잡아먹겠다고? 맞을래?')
-  st.bomb()
+  st.balloons()
