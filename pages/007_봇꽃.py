@@ -1,7 +1,6 @@
 
 import streamlit as st
 import pandas as pd
-import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
@@ -13,9 +12,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 
 
-# ---------------------------------------
+# =======================================
 # 1. 페이지 설정
-# ---------------------------------------
+# =======================================
 
 st.set_page_config(
     page_title="A Spring Day with Iris",
@@ -24,9 +23,9 @@ st.set_page_config(
 )
 
 
-# ---------------------------------------
+# =======================================
 # 2. CSS 디자인
-# ---------------------------------------
+# =======================================
 
 st.markdown("""
 <style>
@@ -123,9 +122,9 @@ div[data-testid="stMetric"] {
 """, unsafe_allow_html=True)
 
 
-# ---------------------------------------
+# =======================================
 # 3. 벚꽃 애니메이션
-# ---------------------------------------
+# =======================================
 
 st.markdown("""
 <div class="flower">🌸</div>
@@ -136,9 +135,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ---------------------------------------
+# =======================================
 # 4. 메인 제목
-# ---------------------------------------
+# =======================================
 
 st.markdown("""
 <div style="text-align:center; padding:30px 10px;">
@@ -169,14 +168,16 @@ st.markdown("""
 st.divider()
 
 
-# ---------------------------------------
+# =======================================
 # 5. CSV 파일 불러오기
-# ---------------------------------------
+# =======================================
 
 @st.cache_data
 def load_data():
 
-    file_path = Path(__file__).resolve().parent.parent / "Iris.csv"
+    file_path = (
+        Path(__file__).resolve().parent.parent / "Iris.csv"
+    )
 
     if not file_path.exists():
         raise FileNotFoundError(
@@ -184,13 +185,19 @@ def load_data():
         )
 
     try:
-        data = pd.read_csv(file_path, encoding="utf-8-sig")
+        data = pd.read_csv(
+            file_path,
+            encoding="utf-8-sig"
+        )
+
     except UnicodeDecodeError:
-        data = pd.read_csv(file_path, encoding="cp949")
+        data = pd.read_csv(
+            file_path,
+            encoding="cp949"
+        )
 
     data.columns = data.columns.str.strip()
 
-    # 잘못 입력된 열 이름 보정
     data = data.rename(columns={
         "꽃발침 길이": "꽃받침 길이",
         "꽃받침길이": "꽃받침 길이",
@@ -210,9 +217,9 @@ except Exception as e:
     st.stop()
 
 
-# ---------------------------------------
+# =======================================
 # 6. 데이터 설정
-# ---------------------------------------
+# =======================================
 
 FEATURES = [
     "꽃받침 길이",
@@ -232,10 +239,15 @@ if "품종" not in df.columns:
     st.error("CSV 파일에 '품종' 열이 필요합니다.")
     st.stop()
 
-df = df.dropna(subset=FEATURES + ["품종"]).copy()
+df = df.dropna(
+    subset=FEATURES + ["품종"]
+).copy()
 
 for feature in FEATURES:
-    df[feature] = pd.to_numeric(df[feature], errors="coerce")
+    df[feature] = pd.to_numeric(
+        df[feature],
+        errors="coerce"
+    )
 
 df = df.dropna(subset=FEATURES)
 
@@ -258,9 +270,9 @@ ALGORITHMS = [
 ]
 
 
-# ---------------------------------------
+# =======================================
 # 7. 알고리즘 생성
-# ---------------------------------------
+# =======================================
 
 def create_model(algorithm):
 
@@ -295,9 +307,9 @@ def create_model(algorithm):
     return model
 
 
-# ---------------------------------------
-# 8. 품종 예측 함수
-# ---------------------------------------
+# =======================================
+# 8. 품종 예측
+# =======================================
 
 def predict_species(features, values, algorithm):
 
@@ -323,9 +335,9 @@ def predict_species(features, values, algorithm):
     return prediction, confidence
 
 
-# ---------------------------------------
+# =======================================
 # 9. 알고리즘 3가지 비교
-# ---------------------------------------
+# =======================================
 
 def compare_algorithms(features, values):
 
@@ -363,7 +375,9 @@ def compare_algorithms(features, values):
 
     result_df = pd.DataFrame(results)
 
-    vote_counts = result_df["원본 품종"].value_counts()
+    vote_counts = result_df[
+        "원본 품종"
+    ].value_counts()
 
     max_votes = vote_counts.max()
 
@@ -374,16 +388,19 @@ def compare_algorithms(features, values):
     return result_df, majority_species, max_votes
 
 
-# ---------------------------------------
+# =======================================
 # 10. 비교 결과 출력
-# ---------------------------------------
+# =======================================
 
 def show_comparison(features, values):
 
-    st.markdown("### 🌷 3가지 알고리즘 예측 결과 비교")
+    st.markdown(
+        "### 🌷 3가지 알고리즘 예측 결과 비교"
+    )
 
     result_df, majority_species, max_votes = compare_algorithms(
-        features, values
+        features,
+        values
     )
 
     display_df = result_df[
@@ -442,13 +459,17 @@ def show_comparison(features, values):
         )
 
         if max_votes == 3:
+
             st.success(
-                f"세 가지 알고리즘 모두 **{species_name}**으로 예측했습니다!"
+                f"세 가지 알고리즘 모두 "
+                f"**{species_name}**으로 예측했습니다!"
             )
 
         else:
+
             st.info(
-                f"가장 많은 알고리즘이 **{species_name}**으로 예측했습니다. "
+                f"가장 많은 알고리즘이 "
+                f"**{species_name}**으로 예측했습니다. "
                 f"({max_votes}/3)"
             )
 
@@ -465,9 +486,9 @@ def show_comparison(features, values):
     )
 
 
-# ---------------------------------------
+# =======================================
 # 11. 그래프 출력
-# ---------------------------------------
+# =======================================
 
 def draw_graph(features, values, title):
 
@@ -477,25 +498,30 @@ def draw_graph(features, values, title):
 
     for species in df["품종"].unique():
 
-        species_data = df[df["품종"] == species]
+        species_data = df[
+            df["품종"] == species
+        ]
 
         fig.add_trace(
             go.Scatter(
                 x=species_data[features[0]],
                 y=species_data[features[1]],
                 mode="markers",
-                name=SPECIES_NAMES.get(species, species),
+                name=SPECIES_NAMES.get(
+                    species,
+                    species
+                ),
                 marker=dict(
                     size=9,
                     color=SPECIES_COLORS.get(
-                        species, "#B8B8B8"
+                        species,
+                        "#B8B8B8"
                     ),
                     opacity=0.75
                 )
             )
         )
 
-    # 사용자가 입력한 꽃의 위치
     fig.add_trace(
         go.Scatter(
             x=[values[0]],
@@ -531,9 +557,9 @@ def draw_graph(features, values, title):
     )
 
 
-# ---------------------------------------
+# =======================================
 # 12. 알고리즘 원리 설명
-# ---------------------------------------
+# =======================================
 
 def show_algorithm_info():
 
@@ -546,6 +572,7 @@ def show_algorithm_info():
         가장 많이 나타나는 품종으로 분류하는 알고리즘입니다.
 
         **작동 원리**
+
         1. 새로운 붓꽃의 특징을 입력합니다.
         2. 기존 붓꽃 데이터와의 거리를 계산합니다.
         3. 가장 가까운 5개의 데이터를 선택합니다.
@@ -559,6 +586,7 @@ def show_algorithm_info():
         각각의 예측 결과를 종합하는 알고리즘입니다.
 
         **작동 원리**
+
         1. 여러 개의 학습용 데이터 집합을 구성합니다.
         2. 각각의 데이터로 여러 결정 트리를 만듭니다.
         3. 각 결정 트리가 붓꽃의 품종을 예측합니다.
@@ -572,6 +600,7 @@ def show_algorithm_info():
         새로운 데이터가 어느 품종에 속하는지 분류하는 알고리즘입니다.
 
         **작동 원리**
+
         1. 붓꽃 데이터를 특징에 따라 배치합니다.
         2. 품종을 구분하는 경계를 찾습니다.
         3. 새로운 데이터가 경계의 어느 쪽에 있는지 확인합니다.
@@ -581,9 +610,9 @@ def show_algorithm_info():
         """)
 
 
-# ---------------------------------------
+# =======================================
 # 13. 탭 구성
-# ---------------------------------------
+# =======================================
 
 tab1, tab2 = st.tabs([
     "🌸 꽃잎으로 품종 예측",
@@ -611,6 +640,7 @@ with tab1:
 
     min1 = float(df[feature1].min())
     max1 = float(df[feature1].max())
+
     min2 = float(df[feature2].min())
     max2 = float(df[feature2].max())
 
@@ -657,7 +687,8 @@ with tab1:
         st.markdown("### 🌼 예측 결과")
 
         st.success(
-            f"예측된 품종은 **{SPECIES_NAMES.get(prediction, prediction)}**입니다!"
+            f"예측된 품종은 "
+            f"**{SPECIES_NAMES.get(prediction, prediction)}**입니다!"
         )
 
         col1, col2 = st.columns(2)
@@ -720,27 +751,23 @@ with tab2:
 
     col1, col2 = st.columns(2)
 
-    with col1:
-
-        selected_feature1 = st.selectbox(
-            "첫 번째 속성 선택",
-            FEATURES,
-            index=0,
-            key="feature1"
-        )
+    selected_feature1 = st.selectbox(
+        "첫 번째 속성 선택",
+        FEATURES,
+        index=0,
+        key="feature1"
+    )
 
     second_options = [
         feature for feature in FEATURES
         if feature != selected_feature1
     ]
 
-    with col2:
-
-        selected_feature2 = st.selectbox(
-            "두 번째 속성 선택",
-            second_options,
-            key="feature2"
-        )
+    selected_feature2 = st.selectbox(
+        "두 번째 속성 선택",
+        second_options,
+        key="feature2"
+    )
 
     col1, col2 = st.columns(2)
 
@@ -793,7 +820,8 @@ with tab2:
         st.markdown("### 🌼 예측 결과")
 
         st.success(
-            f"예측된 품종은 **{SPECIES_NAMES.get(prediction, prediction)}**입니다!"
+            f"예측된 품종은 "
+            f"**{SPECIES_NAMES.get(prediction, prediction)}**입니다!"
         )
 
         col1, col2 = st.columns(2)
@@ -842,27 +870,3 @@ with tab2:
 
     show_algorithm_info()
 
-
-# ---------------------------------------
-# 14. 하단 문구
-# ---------------------------------------
-
-st.divider()
-
-st.markdown("""
-<div style="text-align:center; padding:20px;">
-
-    <p style="font-size:25px;">
-        🌸 🌿 🌸
-    </p>
-
-    <p style="color:#718B70; font-size:16px;">
-        Every flower has its own beauty.
-    </p>
-
-    <p style="color:#A18CA6; font-size:13px;">
-        A Spring Day with Iris
-    </p>
-
-</div>
-""", unsafe_allow_html=True)
