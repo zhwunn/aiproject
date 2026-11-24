@@ -1,9 +1,29 @@
-# ==========================================
-# 제목 영역
-# ==========================================
+import streamlit as st
+import pandas as pd
+from pathlib import Path
 
+st.set_page_config(
+    page_title="말랑말랑 식품 섭취 연구소",
+    page_icon="🍡",
+    layout="wide"
+)
 st.markdown("""
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+html, body, [class*="css"] {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.stApp {
+    background: linear-gradient(
+        135deg,
+        #fff8f5,
+        #fffafd,
+        #f4f8ff
+    );
+}
+
 .hero-box {
     background: linear-gradient(
         120deg,
@@ -14,13 +34,11 @@ st.markdown("""
     padding: 30px;
     border-radius: 25px;
     border: 2px solid white;
-    box-shadow: 0 8px 22px rgba(190,153,170,0.13);
     margin-bottom: 22px;
 }
 
 .hero-title {
-    font-family: 'Noto Sans KR', sans-serif;
-    font-weight: 700;
+    font-family: 'Jua', sans-serif;
     font-size: 30px;
     color: #765d70;
     margin-bottom: 10px;
